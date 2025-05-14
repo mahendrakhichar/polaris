@@ -1,33 +1,38 @@
-{% extends 'base.html' %} {% block title %}Home - Food Delivery{% endblock %} {%
-block content %}
+{% extends 'base.html' %}
+
+{% block title %}Home - FoodieGo{% endblock %}
+
+{% block content %}
 <div class="text-center">
-  <h1 class="text-4xl font-bold text-blue-600 mb-4">
-    Welcome to Food Delivery
+  <h1 class="text-4xl font-extrabold text-indigo-700 mb-4 drop-shadow">
+    Welcome to FoodieGo
   </h1>
-  <p class="text-lg text-gray-700 mb-6">
-    Order delicious meals from your favorite restaurants with ease!
+  <p class="text-lg text-gray-600 mb-8">
+    Get your cravings delivered fast from top-rated local spots!
   </p>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <a
       href="/suggest_restaurants"
-      class="bg-blue-500 text-white p-4 rounded-lg hover:bg-blue-600"
+      class="bg-gradient-to-br from-pink-100 to-pink-300 text-pink-900 p-6 rounded-2xl shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
     >
-      <h2 class="text-xl font-semibold">Find Restaurants</h2>
-      <p>Discover restaurants based on cuisine and delivery time.</p>
+      <h2 class="text-xl font-bold mb-1">Explore Restaurants</h2>
+      <p class="text-sm">Browse by food type, ratings & time.</p>
     </a>
+
     <a
       href="/place_order"
-      class="bg-green-500 text-white p-4 rounded-lg hover:bg-green-600"
+      class="bg-gradient-to-br from-emerald-100 to-emerald-300 text-emerald-900 p-6 rounded-2xl shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
     >
-      <h2 class="text-xl font-semibold">Place an Order</h2>
-      <p>Order your favorite meals quickly.</p>
+      <h2 class="text-xl font-bold mb-1">Place an Order</h2>
+      <p class="text-sm">Quick checkout & real-time order tracking.</p>
     </a>
+
     <a
       href="/register_user"
-      class="bg-purple-500 text-white p-4 rounded-lg hover:bg-purple-600"
+      class="bg-gradient-to-br from-sky-100 to-sky-300 text-sky-900 p-6 rounded-2xl shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
     >
-      <h2 class="text-xl font-semibold">Join Now</h2>
-      <p>Sign up as a user or rider to start.</p>
+      <h2 class="text-xl font-bold mb-1">Join Us</h2>
+      <p class="text-sm">Create an account to start ordering or delivering.</p>
     </a>
   </div>
 </div>

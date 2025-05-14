@@ -4,102 +4,58 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}Food Delivery App{% endblock %}</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Custom CSS -->
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='css/styles.css') }}"
     />
   </head>
-  <body class="bg-gray-100 font-sans">
-    <!-- Top Navbar -->
-    <nav class="bg-blue-600 text-white p-4 shadow-md">
-      <div class="container mx-auto flex justify-between items-center">
-        <a href="/" class="text-2xl font-bold">🍽️ Food Delivery</a>
-      </div>
-    </nav>
+  <body class="bg-gradient-to-br from-rose-50 to-teal-50 font-sans min-h-screen">
 
-    <!-- Page-wide Navigation Buttons -->
-    <div class="container mx-auto mt-4 px-4">
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        <a
-          href="/register_user"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Register User</a
-        >
-        <a
-          href="/register_rider"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Register Rider</a
-        >
-        <a
-          href="/register_restaurant"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Register Restaurant</a
-        >
-        <a
-          href="/suggest_restaurants"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Suggest Restaurants</a
-        >
-        <a
-          href="/view_menu"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >View Menu</a
-        >
-        <a
-          href="/place_order"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Place Order</a
-        >
-        <a
-          href="/assign_rider"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Assign Rider</a
-        >
-        <a
-          href="/update_rider_location"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Update Rider Location</a
-        >
-        <a
-          href="/user_orders"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >User Orders</a
-        >
-        <a
-          href="/rider_orders"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Rider Orders</a
-        >
-        <a
-          href="/completed_orders"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Completed Orders</a
-        >
-        <a
-          href="/users"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Users</a
-        >
-        <a
-          href="/riders"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Rider</a
-        >
-        <a
-          href="/restaurants"
-          class="bg-white text-blue-600 border border-blue-600 p-2 rounded-lg shadow hover:bg-blue-600 hover:text-white text-center transition"
-          >Restaurants</a
-        >
+    <!-- Top Navbar -->
+    <header class="bg-white shadow-md py-4 px-6 border-b border-rose-100">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <a href="/" class="text-3xl font-extrabold text-rose-600 tracking-wide">
+          🍽️ FoodieGo
+        </a>
       </div>
-    </div>
+    </header>
+
+    <!-- Navigation Grid -->
+    <section class="max-w-7xl mx-auto mt-8 px-4">
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5">
+        {% set links = [
+          ('Register User', '/register_user'),
+          ('Register Rider', '/register_rider'),
+          ('Register Restaurant', '/register_restaurant'),
+          ('Suggest Restaurants', '/suggest_restaurants'),
+          ('View Menu', '/view_menu'),
+          ('Place Order', '/place_order'),
+          ('Assign Rider', '/assign_rider'),
+          ('Update Rider Location', '/update_rider_location'),
+          ('User Orders', '/user_orders'),
+          ('Rider Orders', '/rider_orders'),
+          ('Completed Orders', '/completed_orders'),
+          ('Users', '/users'),
+          ('Rider', '/riders'),
+          ('Restaurants', '/restaurants')
+        ] %}
+        {% for label, link in links %}
+        <a
+          href="{{ link }}"
+          class="bg-white p-4 rounded-xl text-center font-semibold text-teal-700 border border-teal-200 shadow hover:shadow-lg hover:bg-teal-100 transition duration-200 ease-in-out"
+        >
+          {{ label }}
+        </a>
+        {% endfor %}
+      </div>
+    </section>
 
     <!-- Main Content -->
-    <div class="container mx-auto p-6">{% block content %} {% endblock %}</div>
+    <main class="max-w-6xl mx-auto px-4 py-10">
+      {% block content %} {% endblock %}
+    </main>
 
-    <!-- JS -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>
