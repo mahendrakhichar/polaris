@@ -1,0 +1,28 @@
+{% extends 'base.html' %} {% block title %}All Registered Users{% endblock %} {%
+block content %}
+<h1 class="text-3xl font-bold text-blue-600 mb-4">All Registered Users</h1>
+
+{% if error %}
+<div class="alert alert-danger">
+  <p>{{ error }}</p>
+</div>
+{% else %}
+<table class="min-w-full table-auto border-collapse border border-gray-300">
+  <thead>
+    <tr>
+      <th class="py-2 px-4 border border-gray-300">User ID</th>
+      <th class="py-2 px-4 border border-gray-300">Name</th>
+      <th class="py-2 px-4 border border-gray-300">Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    <tr>
+      <td class="py-2 px-4 border border-gray-300">{{ user['user_id'] }}</td>
+      <td class="py-2 px-4 border border-gray-300">{{ user['name'] }}</td>
+      <td class="py-2 px-4 border border-gray-300">{{ user['location'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %} {% endblock %}

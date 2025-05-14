@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}Suggest Restaurants{% endblock %}
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">Find Restaurants</h1>
+
+    <!-- Filters -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Location Filter -->
+            <div>
+                <label class="block text-gray-700 mb-2">Your Location</label>
+                <input type="text" id="location"
+                       class="w-full p-2 border rounded"
+                       placeholder="Enter your location">
+            </div>
+
+            <!-- Cuisine Filter -->
+            <div>
+                <label class="block text-gray-700 mb-2">Cuisine Type</label>
+                <select id="cuisine" class="w-full p-2 border rounded">
+                    <option value="">All Cuisines</option>
+                    {% for cuisine in cuisines %}
+                        <option value="{{ cuisine }}">{{ cuisine }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Meal Period -->
+            <div>
+                <label class="block text-gray-700 mb-2">Meal Time</label>
+                <div class="flex gap-2">
+                    <button type="button" class="meal-btn flex-1 py-2 px-4 rounded border" data-meal="breakfast">
+                        🌅 Breakfast
+                    </button>
+                    <button type="button" class="meal-btn flex-1 py-2 px-4 rounded border" data-meal="lunch">
+                        🌞 Lunch
+                    </button>
+                    <button type="button" class="meal-btn flex-1 py-2 px-4 rounded border" data-meal="dinner">
+                        🌙 Dinner
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Restaurant List -->
+    <div id="restaurantList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% if restaurants %}
+          {% for restaurant in restaurants %}
+              <div class="restaurant-card bg-white rounded-lg shadow-md overflow-hidden"
+                   data-cuisine="{{ restaurant.food_type }}"
+                   data-location="{{ restaurant.location }}"
+                   data-meals="{{ restaurant.serves_breakfast }},{{ restaurant.serves_lunch }},{{ restaurant.serves_dinner }}">
+                  <div class="p-4">
+                      <h3 class="font-bold text-lg mb-2">{{ restaurant.name }}</h3>
+                      <p class="text-gray-600 text-sm mb-2">{{ restaurant.food_type }}</p>
+                      <p class="text-sm mb-2">
+                          <span class="text-gray-500">Location:</span> {{ restaurant.location }}
+                      </p>
+                      <div class="text-sm text-gray-500">
+                          <p>Hours: {{ restaurant.opening_time }} - {{ restaurant.closing_time }}</p>
+                          <p>Prep time: {{ restaurant.prep_time }} mins</p>
+                      </div>
+                      <div class="flex gap-2 mt-2">
+                          {% if restaurant.serves_breakfast %}
+                              <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">Breakfast</span>
+                          {% endif %}
+                          {% if restaurant.serves_lunch %}
+                              <span class="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs">Lunch</span>
+                          {% endif %}
+                          {% if restaurant.serves_dinner %}
+                              <span class="px-2 py-1 bg-purple-100 text-purple-800 rounded-full text-xs">Dinner</span>
+                          {% endif %}
+                      </div>
+                  </div>
+                  <a href="/place_order?restaurant={{ restaurant.restaurant_id }}"
+                     class="block bg-blue-600 text-white text-center py-2 hover:bg-blue-700">
+                      Order Now
+                  </a>
+              </div>
+          {% endfor %}
+      {% else %}
+          <p class="col-span-3 text-center text-gray-500">No restaurants found</p>
+      {% endif %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const getCurrentMealPeriod = () => {
+        const hour = new Date().getHours();
+        if (hour >= 6 && hour < 11) return 'breakfast';
+        if (hour >= 11 && hour < 16) return 'lunch';
+        return 'dinner';
+    };
+
+    const filterRestaurants = () => {
+        const location = document.getElementById('location').value.toLowerCase();
+        const cuisine = document.getElementById('cuisine').value.toLowerCase();
+        const activeMeal = document.querySelector('.meal-btn.active')?.dataset.meal;
+
+        document.querySelectorAll('.restaurant-card').forEach(card => {
+            const cardCuisine = card.dataset.cuisine.toLowerCase();
+            const cardLocation = card.dataset.location.toLowerCase();
+            const meals = card.dataset.meals.split(',');
+            const mealIndex = {'breakfast': 0, 'lunch': 1, 'dinner': 2};
+
+            const matchesCuisine = !cuisine || cardCuisine.includes(cuisine);
+            const matchesLocation = !location || cardLocation.includes(location);
+            const matchesMeal = !activeMeal || meals[mealIndex[activeMeal]] === '1';
+
+            card.style.display = matchesCuisine && matchesLocation && matchesMeal ? 'block' : 'none';
+        });
+    };
+
+    // Set initial meal period
+    const currentMeal = getCurrentMealPeriod();
+    document.querySelector(`[data-meal="${currentMeal}"]`).classList.add('active', 'bg-blue-600', 'text-white');
+    filterRestaurants();
+
+    // Add event listeners
+    document.getElementById('location').addEventListener('input', filterRestaurants);
+    document.getElementById('cuisine').addEventListener('change', filterRestaurants);
+
+    document.querySelectorAll('.meal-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.meal-btn').forEach(b =>
+                b.classList.remove('active', 'bg-blue-600', 'text-white'));
+            btn.classList.add('active', 'bg-blue-600', 'text-white');
+            filterRestaurants();
+        });
+    });
+});
+</script>
+{% endblock %}

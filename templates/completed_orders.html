@@ -1,0 +1,25 @@
+{% extends 'base.html' %} {% block title %}Completed Orders{% endblock %} {%
+block content %}
+<h1 class="text-3xl font-bold text-blue-600 mb-6">Completed Orders</h1>
+
+{% if orders %}
+<div class="grid gap-4">
+  {% for order in orders %}
+  <div class="bg-white p-4 rounded shadow-md">
+    <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+    <p><strong>User ID:</strong> {{ order.user_id }}</p>
+    <p><strong>Restaurant ID:</strong> {{ order.restaurant_id }}</p>
+    <p><strong>Rider ID:</strong> {{ order.rider_id or "Not Assigned" }}</p>
+    <p><strong>Items:</strong> {{ order.items }}</p>
+    <p><strong>Total Price:</strong> ₹{{ order.total_price }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span class="text-green-600 font-semibold">{{ order.status }}</span>
+    </p>
+    <p><strong>Ordered At:</strong> {{ order.order_time }}</p>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<p class="text-gray-700 text-lg">No completed orders found.</p>
+{% endif %} {% endblock %}

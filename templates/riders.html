@@ -1,0 +1,26 @@
+{% extends 'base.html' %} {% block title %}All Riders{% endblock %} {% block
+content %}
+<h1 class="text-3xl font-bold text-blue-600 mb-4">All Registered Riders</h1>
+
+{% if error %}
+<p class="text-red-600">{{ error }}</p>
+{% else %}
+<table class="table-auto w-full text-left">
+  <thead>
+    <tr>
+      <th class="px-4 py-2">Rider ID</th>
+      <th class="px-4 py-2">Name</th>
+      <th class="px-4 py-2">Location</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for rider in riders %}
+    <tr>
+      <td class="px-4 py-2">{{ rider['rider_id'] }}</td>
+      <td class="px-4 py-2">{{ rider['name'] }}</td>
+      <td class="px-4 py-2">{{ rider['location'] }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %} {% endblock %}

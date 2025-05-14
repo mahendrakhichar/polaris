@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}View Menu{% endblock %}
+{% block content %}
+<div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">Restaurant Menu</h1>
+
+    <!-- Restaurant Selection -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-gray-700 mb-2">Restaurant</label>
+                <select id="restaurant_id" class="w-full p-2 border rounded">
+                    <option value="">Select Restaurant</option>
+                    {% for restaurant in restaurants %}
+                        <option value="{{ restaurant.restaurant_id }}">{{ restaurant.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-700 mb-2">Category</label>
+                <select id="category" class="w-full p-2 border rounded">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Display -->
+    <div id="menuItems" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Menu items will be populated here -->
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const restaurantSelect = document.getElementById('restaurant_id');
+    const categorySelect = document.getElementById('category');
+    const menuDisplay = document.getElementById('menuItems');
+
+    async function loadMenu(restaurantId) {
+        try {
+            const response = await fetch(`/api/restaurant/${restaurantId}/menu`);
+            if (!response.ok) throw new Error('Failed to fetch menu');
+
+            const menu = await response.json();
+
+            // Display menu items
+            menuDisplay.innerHTML = menu.map(item => `
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-bold text-lg">${item.item_name}</h3>
+                        <span class="text-blue-600 font-bold">$${item.price.toFixed(2)}</span>
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Error:', error);
+            menuDisplay.innerHTML = '<p class="text-red-500">Failed to load menu</p>';
+        }
+    }
+
+    restaurantSelect.addEventListener('change', (e) => {
+        if (e.target.value) {
+            loadMenu(e.target.value);
+        } else {
+            menuDisplay.innerHTML = '';
+        }
+    });
+});
+</script>
+{% endblock %}

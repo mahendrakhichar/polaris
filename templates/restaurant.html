@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}All Restaurants{% endblock %}
+{% block content %}
+<div class="container mx-auto p-6">
+    <h2 class="text-2xl font-bold text-center mb-4">All Registered Restaurants</h2>
+
+    <!-- Filter Controls -->
+    <div class="mb-6 flex gap-4 justify-center">
+        <select class="border rounded px-3 py-1" id="cuisineFilter">
+            <option value="">All Cuisines</option>
+            {% for cuisine in cuisines %}
+            <option value="{{ cuisine }}">{{ cuisine }}</option>
+            {% endfor %}
+        </select>
+        <div class="flex gap-2">
+            <button class="px-3 py-1 rounded border" data-meal="breakfast">Breakfast</button>
+            <button class="px-3 py-1 rounded border" data-meal="lunch">Lunch</button>
+            <button class="px-3 py-1 rounded border" data-meal="dinner">Dinner</button>
+        </div>
+    </div>
+
+    {% if restaurants %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto border-collapse">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2">Name</th>
+                    <th class="px-4 py-2">Location</th>
+                    <th class="px-4 py-2">Cuisine</th>
+                    <th class="px-4 py-2">Hours</th>
+                    <th class="px-4 py-2">Prep Time</th>
+                    <th class="px-4 py-2">Serves</th>
+                    <th class="px-4 py-2">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for restaurant in restaurants %}
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="px-4 py-2 font-medium">{{ restaurant.name }}</td>
+                    <td class="px-4 py-2">{{ restaurant.location }}</td>
+                    <td class="px-4 py-2">{{ restaurant.food_type }}</td>
+                    <td class="px-4 py-2">
+                        {{ restaurant.opening_time }} - {{ restaurant.closing_time }}
+                    </td>
+                    <td class="px-4 py-2">{{ restaurant.prep_time }} mins</td>
+                    <td class="px-4 py-2">
+                        {% if restaurant.serves_breakfast %}🌅{% endif %}
+                        {% if restaurant.serves_lunch %}🌞{% endif %}
+                        {% if restaurant.serves_dinner %}🌙{% endif %}
+                    </td>
+                    <td class="px-4 py-2">
+                        {% if restaurant.is_open %}
+                        <span class="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">Open</span>
+                        {% else %}
+                        <span class="px-2 py-1 rounded-full text-xs bg-red-100 text-red-800">Closed</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p class="text-center text-gray-500">No restaurants found.</p>
+    {% endif %}
+</div>
+
+<script>
+    // Filter functionality
+    document.getElementById('cuisineFilter').addEventListener('change', function() {
+        // Add filter logic
+    });
+
+    document.querySelectorAll('[data-meal]').forEach(button => {
+        button.addEventListener('click', function() {
+            // Add meal period filter logic
+        });
+    });
+</script>
+{% endblock %}

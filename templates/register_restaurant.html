@@ -1,0 +1,151 @@
+{% extends 'base.html' %} {% block title %}Register Restaurant{% endblock %} {%
+block content %}
+<h1 class="text-3xl font-bold text-blue-600 mb-4">Register Restaurant</h1>
+<form
+  id="registerRestaurantForm"
+  class="bg-white p-6 rounded-lg shadow-md max-w-md mx-auto"
+>
+  <div class="mb-4">
+    <label for="name" class="block text-gray-700">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="w-full p-2 border rounded"
+      required
+    />
+  </div>
+  <div class="mb-4">
+    <label for="location" class="block text-gray-700">Location</label>
+    <input
+      type="text"
+      id="location"
+      name="location"
+      class="w-full p-2 border rounded"
+      placeholder="e.g., Downtown"
+      required
+    />
+  </div>
+  <div class="mb-4">
+    <label for="food_type" class="block text-gray-700">Food Type</label>
+    <input
+      type="text"
+      id="food_type"
+      name="food_type"
+      class="w-full p-2 border rounded"
+      placeholder="e.g., Italian"
+      required
+    />
+  </div>
+  <div class="mb-4">
+    <label for="prep_time" class="block text-gray-700"
+      >Preparation Time (minutes)</label
+    >
+    <input
+      type="number"
+      id="prep_time"
+      name="prep_time"
+      class="w-full p-2 border rounded"
+      value="10"
+      required
+    />
+  </div>
+  <div class="mb-4">
+    <label class="block text-gray-700 mb-1">Menu Items (name and price)</label>
+    <div id="menuItems" class="space-y-2">
+      <div class="flex gap-2">
+        <input
+          type="text"
+          class="item-name flex-1 p-2 border rounded"
+          placeholder="Item name"
+        />
+        <input
+          type="number"
+          class="item-price w-24 p-2 border rounded"
+          placeholder="Price"
+          min="0"
+          step="0.01"
+        />
+      </div>
+    </div>
+    <button
+      type="button"
+      id="addItem"
+      class="mt-2 text-blue-600 hover:underline"
+    >
+      + Add another item
+    </button>
+  </div>
+  <button
+    type="submit"
+    class="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600"
+  >
+    Register
+  </button>
+</form>
+<div id="result" class="mt-4 text-center"></div>
+
+<script>
+  document.getElementById("addItem").addEventListener("click", () => {
+    const container = document.createElement("div");
+    container.className = "flex gap-2 mt-2";
+    container.innerHTML = `
+            <input type="text" class="item-name flex-1 p-2 border rounded" placeholder="Item name" />
+            <input type="number" class="item-price w-24 p-2 border rounded" placeholder="Price" min="0" step="0.01" />
+        `;
+    document.getElementById("menuItems").appendChild(container);
+  });
+
+  document
+    .getElementById("registerRestaurantForm")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById("name").value;
+      const location = document.getElementById("location").value;
+      const prep_time = parseInt(document.getElementById("prep_time").value);
+      const food_type = document.getElementById("food_type").value;
+
+      const itemNames = document.querySelectorAll(".item-name");
+      const itemPrices = document.querySelectorAll(".item-price");
+
+      const menu = [];
+      for (let i = 0; i < itemNames.length; i++) {
+        const itemName = itemNames[i].value.trim();
+        const price = parseFloat(itemPrices[i].value);
+        if (itemName && !isNaN(price) && price > 0) {
+          menu.push({ item_name: itemName, price });
+        }
+      }
+
+      const resultDiv = document.getElementById("result");
+
+      if (menu.length === 0) {
+        resultDiv.innerHTML = `<p class="text-red-600">Please add at least one valid menu item.</p>`;
+        return;
+      }
+
+      try {
+        const response = await fetch("/register_restaurant", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name,
+            location,
+            prep_time,
+            food_type,
+            menu_items: menu,
+          }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+          resultDiv.innerHTML = `<p class="text-green-600">Restaurant registered! ID: ${data.restaurant_id}</p>`;
+        } else {
+          resultDiv.innerHTML = `<p class="text-red-600">Error: ${data.error}</p>`;
+        }
+      } catch (error) {
+        resultDiv.innerHTML = `<p class="text-red-600">Error: ${error.message}</p>`;
+      }
+    });
+</script>
+{% endblock %}
